@@ -1,0 +1,222 @@
+{
+  "id": "im.jankowiak.forgejo-paca",
+  "displayName": "Forgejo Integration",
+  "description": "Integrates Forgejo repositories, pull requests, and branches with Paca projects and tasks.",
+  "version": "0.1.0",
+  "capabilities": ["repository"],
+  "permissions": ["db.read", "db.write"],
+  "backend": {
+    "allowedConfigKeys": ["ENCRYPTION_KEY", "PUBLIC_URL"],
+    "allowedOutboundDomains": ["*"],
+    "routes": [
+      {
+        "method": "GET",
+        "path": "/projects/:projectId/integration",
+        "middlewares": [
+          { "name": "optionalAuthn" },
+          { "name": "requireFreshPassword" },
+          {
+            "name": "requirePermissions",
+            "scope": "project",
+            "permissions": ["projects.read"]
+          }
+        ]
+      },
+      {
+        "method": "POST",
+        "path": "/projects/:projectId/integration/token",
+        "middlewares": [
+          { "name": "optionalAuthn" },
+          { "name": "requireFreshPassword" },
+          {
+            "name": "requirePermissions",
+            "scope": "project",
+            "permissions": ["projects.write"]
+          }
+        ]
+      },
+      {
+        "method": "DELETE",
+        "path": "/projects/:projectId/integration/token",
+        "middlewares": [
+          { "name": "optionalAuthn" },
+          { "name": "requireFreshPassword" },
+          {
+            "name": "requirePermissions",
+            "scope": "project",
+            "permissions": ["projects.write"]
+          }
+        ]
+      },
+      {
+        "method": "GET",
+        "path": "/projects/:projectId/integration/accessible-repos",
+        "middlewares": [
+          { "name": "optionalAuthn" },
+          { "name": "requireFreshPassword" },
+          {
+            "name": "requirePermissions",
+            "scope": "project",
+            "permissions": ["projects.read"]
+          }
+        ]
+      },
+      {
+        "method": "GET",
+        "path": "/projects/:projectId/repositories",
+        "middlewares": [
+          { "name": "optionalAuthn" },
+          { "name": "requireFreshPassword" },
+          {
+            "name": "requirePermissions",
+            "scope": "project",
+            "permissions": ["projects.read"]
+          }
+        ]
+      },
+      {
+        "method": "POST",
+        "path": "/projects/:projectId/repositories",
+        "middlewares": [
+          { "name": "optionalAuthn" },
+          { "name": "requireFreshPassword" },
+          {
+            "name": "requirePermissions",
+            "scope": "project",
+            "permissions": ["projects.write"]
+          }
+        ]
+      },
+      {
+        "method": "DELETE",
+        "path": "/projects/:projectId/repositories/:repoId",
+        "middlewares": [
+          { "name": "optionalAuthn" },
+          { "name": "requireFreshPassword" },
+          {
+            "name": "requirePermissions",
+            "scope": "project",
+            "permissions": ["projects.write"]
+          }
+        ]
+      },
+      {
+        "method": "GET",
+        "path": "/projects/:projectId/repositories/:repoId/clone-info",
+        "middlewares": [
+          { "name": "optionalAuthn" },
+          { "name": "requireFreshPassword" },
+          {
+            "name": "requirePermissions",
+            "scope": "project",
+            "permissions": ["projects.read"]
+          }
+        ]
+      },
+      {
+        "method": "GET",
+        "path": "/projects/:projectId/tasks/:taskId/pull-requests",
+        "middlewares": [
+          { "name": "optionalAuthn" },
+          { "name": "requireFreshPassword" },
+          {
+            "name": "requirePermissions",
+            "scope": "project",
+            "permissions": ["tasks.read"]
+          }
+        ]
+      },
+      {
+        "method": "POST",
+        "path": "/projects/:projectId/tasks/:taskId/pull-requests",
+        "middlewares": [
+          { "name": "optionalAuthn" },
+          { "name": "requireFreshPassword" },
+          {
+            "name": "requirePermissions",
+            "scope": "project",
+            "permissions": ["tasks.write"]
+          }
+        ]
+      },
+      {
+        "method": "POST",
+        "path": "/projects/:projectId/tasks/:taskId/pull-requests/link",
+        "middlewares": [
+          { "name": "optionalAuthn" },
+          { "name": "requireFreshPassword" },
+          {
+            "name": "requirePermissions",
+            "scope": "project",
+            "permissions": ["tasks.write"]
+          }
+        ]
+      },
+      {
+        "method": "DELETE",
+        "path": "/projects/:projectId/tasks/:taskId/pull-requests/:prId",
+        "middlewares": [
+          { "name": "optionalAuthn" },
+          { "name": "requireFreshPassword" },
+          {
+            "name": "requirePermissions",
+            "scope": "project",
+            "permissions": ["tasks.write"]
+          }
+        ]
+      },
+      {
+        "method": "GET",
+        "path": "/projects/:projectId/tasks/:taskId/branches",
+        "middlewares": [
+          { "name": "optionalAuthn" },
+          { "name": "requireFreshPassword" },
+          {
+            "name": "requirePermissions",
+            "scope": "project",
+            "permissions": ["tasks.read"]
+          }
+        ]
+      },
+      {
+        "method": "POST",
+        "path": "/projects/:projectId/tasks/:taskId/branches",
+        "middlewares": [
+          { "name": "optionalAuthn" },
+          { "name": "requireFreshPassword" },
+          {
+            "name": "requirePermissions",
+            "scope": "project",
+            "permissions": ["tasks.write"]
+          }
+        ]
+      },
+      {
+        "method": "POST",
+        "path": "/webhook",
+        "middlewares": [
+          { "name": "optionalAuthn" }
+        ]
+      }
+    ]
+  },
+  "frontend": {
+    "remoteEntryUrl": "/plugins/im.jankowiak.forgejo-paca/assets/remoteEntry.js",
+    "extensionPoints": [
+      {
+        "point": "project.settings.tab",
+        "component": "ForgejoSettingsTab",
+        "label": "Forgejo",
+        "order": 110
+      },
+      {
+        "point": "task.detail.section",
+        "component": "ForgejoTaskSection",
+        "order": 6
+      }
+    ]
+  },
+  "mcp": {
+    "remoteEntryUrl": "/plugins-mcp/im.jankowiak.forgejo-paca/mcp.js"
+  }
+}
